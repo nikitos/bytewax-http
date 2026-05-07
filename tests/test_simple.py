@@ -1,21 +1,21 @@
 from bytewax import operators as op
 from bytewax.dataflow import Dataflow
-from bytewax.testing import TestingSink, TestingSource, run_main
+from bytewax.testing import run_main, TestingSink, TestingSource
 
 
 def test_map():
-    flow = Dataflow("test")
+    flow = Dataflow('test')
 
     inp = [0, 1, 2]
-    rows = op.input("inp", flow, TestingSource(inp))
+    rows = op.input('inp', flow, TestingSource(inp))
 
     def add_one(item):
         return item + 1
 
     out = []
-    processed = op.map("process", rows, add_one)
+    processed = op.map('process', rows, add_one)
 
-    op.output("out", processed, TestingSink(out))
+    op.output('out', processed, TestingSink(out))
 
     run_main(flow)
 

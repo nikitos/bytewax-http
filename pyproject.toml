@@ -102,7 +102,10 @@ classifiers = [  # Optional
 # For an analysis of this field vs pip's requirements files see:
 # https://packaging.python.org/discussions/install-requires-vs-requirements/
 dependencies = [
-  "bytewax==0.21.1"
+  "bytewax==0.21.1",
+  "flask==3.1.3",
+  "cloudevents==2.0.0",
+  "waitress==3.0.2"
 ]
 
 # List additional groups of dependencies here (e.g. development
@@ -115,9 +118,9 @@ dependencies = [
 # projects.
 [project.optional-dependencies] # Optional
 dev = [
-    "check-manifest==0.49",
-    "black==23.3.0",    
-    "pre-commit>=2.19.0",
+    "check-manifest==0.51",
+    "black==26.3.1",    
+    "pre-commit>=4.6.0",
     "pytest==9.0.3",
     "tox==4.6.3",
     "sphinx<7",
@@ -149,3 +152,75 @@ build-backend = "setuptools.build_meta"
 pythonpath = [
   "src"
 ]
+
+[tool.ruff]
+src = ["hub"]
+line-length = 119
+include = ["*.py"]
+target-version = "py312"
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".history",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "migrations",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+[tool.ruff.lint]
+extend-select = [
+    "I001",  # https://docs.astral.sh/ruff/rules/#isort-i
+    "TID251",  # https://docs.astral.sh/ruff/rules/#flake8-tidy-imports-tid
+    "Q000", "Q002",  # https://docs.astral.sh/ruff/rules/#flake8-quotes-q
+    "ICN",  # https://docs.astral.sh/ruff/rules/#flake8-import-conventions-icn
+    "UP",  # https://docs.astral.sh/ruff/rules/#pyupgrade-up
+    "N",  # https://docs.astral.sh/ruff/rules/#pep8-naming-n
+]
+ignore = [
+    "UP007",  # non-pep604-annotation
+    "N818",  # error-suffix-on-exception-name
+]
+
+[tool.ruff.lint.flake8-import-conventions]  # ICN
+banned-from = [
+    "time",
+    "datetime",
+]
+
+[tool.ruff.lint.isort]
+extra-standard-library = ["ujson", "dateutil", "PIL", "lxml", "six", "requests", "urllib3", "zoneinfo", "ulid"]
+lines-after-imports = 2
+lines-between-types = 1
+case-sensitive = false
+order-by-type = false
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
+
+[tool.ruff.format]
+quote-style = "single"
