@@ -1,8 +1,8 @@
+import logging
 import queue
-import time
 import threading
 
-from bytewax.inputs import batch, batch_async, DynamicSource, StatelessSourcePartition
+from bytewax.inputs import DynamicSource, StatelessSourcePartition
 from cloudevents.core.bindings.http import from_http_event, HTTPMessage
 from flask import Flask, jsonify, request
 from waitress import serve
@@ -15,12 +15,16 @@ data_queue = queue.SimpleQueue()
 
 def http_listener(host: str, port: int, path: str):
     app = Flask(__name__)
+
     @app.route(path, methods=['POST'])
     def receive_data():
         for data in request.get_json():
-            m = HTTPMessage(request.headers, data)
-            msg = from_http_event(m, BatchFormat())
-            data_queue.put(msg)
+            try:
+                m = HTTPMessage(request.headers, data)
+                msg = from_http_event(m, BatchFormat())
+                data_queue.put(msg)
+            except Exception as e:
+                logging.info(f'Failed to parse CloudEvent: {e}')
 
         return jsonify({'status': 'received'}), 202
 
@@ -31,6 +35,7 @@ class HTTPSourcePartition(StatelessSourcePartition):
     def __init__(self, host: str, port: int, path: str):
         self.proc = threading.Thread(target=http_listener, args=(host, port, path), daemon=True)
         self.proc.start()
+        logging.info(f'Http server started {host}:{port}{path}')
 
     def next_batch(self):
         try:
