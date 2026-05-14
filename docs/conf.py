@@ -19,9 +19,9 @@ sys.path.insert(0, os.path.abspath('../src/'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'bytewax-connector-template'
-copyright = '2023, Example Contributor'
-author = 'Example Contributor'
+project = 'bytewax-http'
+copyright = '2026, Nikita Andriyanov'
+author = 'Nikita Andriyanov'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
