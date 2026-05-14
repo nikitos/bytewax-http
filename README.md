@@ -7,4 +7,3 @@
 </picture>
 <!-- markdownlint-enable MD033 -->
 This project is a http input connector for [Bytewax](https://github.com/bytewax/bytewax).
-
