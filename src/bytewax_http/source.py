@@ -6,6 +6,7 @@ from bytewax.inputs import DynamicSource, StatelessSourcePartition
 from cloudevents.core.bindings.http import from_http_event, HTTPMessage
 from flask import Flask, jsonify, request
 from waitress import serve
+from whitenoise import WhiteNoise
 
 from .utils import BatchFormat
 
@@ -28,6 +29,8 @@ def http_listener(host: str, port: int, path: str):
 
         return jsonify({'status': 'received'}), 202
 
+    app = WhiteNoise(app)
+    app.add_files('/static', prefix='static/')
     serve(app, host=host, port=port)
 
 
