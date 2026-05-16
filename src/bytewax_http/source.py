@@ -25,7 +25,7 @@ def http_listener(host: str, port: int, path: str):
                 msg = from_http_event(m, BatchFormat())
                 data_queue.put(msg)
             except Exception as e:
-                logging.info(f'Failed to parse CloudEvent: {e}')
+                print(f'Failed to parse CloudEvent: {e}')
 
         return jsonify({'status': 'received'}), 202
 
@@ -38,7 +38,7 @@ class HTTPSourcePartition(StatelessSourcePartition):
     def __init__(self, host: str, port: int, path: str):
         self.proc = threading.Thread(target=http_listener, args=(host, port, path), daemon=True)
         self.proc.start()
-        logging.info(f'Http server started {host}:{port}{path}')
+        print(f'Http server started {host}:{port}{path}')
 
     def next_batch(self):
         try:
